@@ -28,13 +28,15 @@ function optionChanged(newID) {
 
 // Update the bar and bubble charts with the data for a new sample ID
 function updateCharts(sampleID) {
-  d3.json(url).then(function(data) {
+  d3.json(url).then(function(data)  {
     let sample = data.samples.find(sample => sample.id == sampleID);
     let otuIDs = sample.otu_ids.slice(0, 10).map(id => `OTU ${id}`);
     let sampleValues = sample.sample_values.slice(0, 10);
     let otuLabels = sample.otu_labels.slice(0, 10);
 
-    // Update the bar chart
+    // build bar chart
+
+    // set up the trace 1
     let trace1 = {
       x: sampleValues.reverse(),
       y: otuIDs.reverse(),
@@ -42,12 +44,16 @@ function updateCharts(sampleID) {
       type: "bar",
       orientation: 'h'
     };
+
+    //set up the layout
     let layout1 = {
       title: "Top 10 Bacterial Cultures Found"
     };
     Plotly.newPlot("bar", [trace1], layout1);
 
-    // Update the bubble chart
+    // set up the bubble chart
+
+    //create trace2
     let trace2 = {
       x: sample.otu_ids,
       y: sample.sample_values,
@@ -58,6 +64,8 @@ function updateCharts(sampleID) {
         size: sample.sample_values
       }
     };
+
+    //set the layout for bubble chart
     let layout2 = {
       title: "Bacteria Cultures per Sample",
       xaxis: { title: "OTU ID" },
@@ -68,6 +76,7 @@ function updateCharts(sampleID) {
 }
 
 // Update the demographics panel with the metadata for a new sample ID
+
 function updateDemographics(sampleID) {
   d3.json(url).then(function(data) {
     let metadata = data.metadata.find(sample => sample.id == sampleID);
@@ -79,5 +88,5 @@ function updateDemographics(sampleID) {
   });
 }
 
-// Initialize the dashboard
+// call the initialization functiion
 initDashboard();
